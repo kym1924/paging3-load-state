@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="androidx.paging.LoadState" />
+
+        <variable
+            name="loadState"
+            type="androidx.paging.CombinedLoadStates" />
+
+        <variable
+            name="isNotLoadingAndListEmpty"
+            type="boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.MainActivity">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_input_text"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_input_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint"
+                android:imeOptions="actionSearch"
+                android:inputType="textNoSuggestions"
+                android:maxLines="1"
+                tools:ignore="TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/layout_swipe_refresh"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/layout_input_text"
+            app:layout_constraintStart_toStartOf="@id/layout_input_text"
+            app:layout_constraintTop_toBottomOf="@id/layout_input_text">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_view_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:shimmer_duration="1000"
+                    app:startShimmer="@{loadState.refresh instanceof LoadState.Loading}"
+                    app:visibleOrNot="@{loadState.refresh instanceof LoadState.Loading}">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/item_blog_shimmer" />
+
+                        <include layout="@layout/item_blog_shimmer" />
+
+                        <include layout="@layout/item_blog_shimmer" />
+
+                        <include layout="@layout/item_blog_shimmer" />
+
+                        <include layout="@layout/item_blog_shimmer" />
+
+                        <include layout="@layout/item_blog_shimmer" />
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_document"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:visibleOrNot="@{loadState.refresh instanceof LoadState.NotLoading}"
+                    tools:listitem="@layout/item_blog" />
+
+                <TextView
+                    android:id="@+id/tv_no_search_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/empty_result"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/rv_document"
+                    app:layout_constraintEnd_toEndOf="@id/rv_document"
+                    app:layout_constraintStart_toStartOf="@id/rv_document"
+                    app:layout_constraintTop_toTopOf="@id/rv_document"
+                    app:visibleOrNot="@{isNotLoadingAndListEmpty == true}" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_retry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/retry"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@id/rv_document"
+                    app:layout_constraintEnd_toEndOf="@id/rv_document"
+                    app:layout_constraintStart_toStartOf="@id/rv_document"
+                    app:layout_constraintTop_toTopOf="@id/rv_document"
+                    app:visibleOrNot="@{loadState.refresh instanceof LoadState.Error}" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

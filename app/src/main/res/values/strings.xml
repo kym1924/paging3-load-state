@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">BlogSearch</string>
+    <string name="hint">검색어를 입력해 주세요.</string>
+    <string name="empty_result">검색 결과가 없습니다.\n다른 검색어를 입력해 보세요.</string>
+    <string name="retry">다시 시도</string>
+    <string name="name_and_date">%s | %s</string>
+</resources>
